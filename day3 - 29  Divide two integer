@@ -1,0 +1,36 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        // Edge case: The only possible overflow scenario
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+        
+        // Determine if the final result should be negative
+        boolean isNegative = (dividend < 0) ^ (divisor < 0);
+        
+        // Convert both to negative to avoid overflow issues with Integer.MIN_VALUE
+        if (dividend > 0) dividend = -dividend;
+        if (divisor > 0) divisor = -divisor;
+        
+        int quotient = 0;
+        
+        // Subtract multiples of the divisor using bit manipulation (shifting)
+        while (dividend <= divisor) { // Use <= because we are working with negative numbers
+            int tempDivisor = divisor;
+            int powerOfTwo = -1; // Accumulate quotient negatively
+            
+            // Double the divisor until it's bigger than the remaining dividend
+            // The first check prevents shifting overflow
+            while (tempDivisor >= (Integer.MIN_VALUE >> 1) && dividend <= (tempDivisor << 1)) {
+                tempDivisor <<= 1;
+                powerOfTwo <<= 1;
+            }
+            
+            dividend -= tempDivisor;
+            quotient += powerOfTwo;
+        }
+        
+        // Return the properly signed quotient
+        return isNegative ? quotient : -quotient;
+    }
+}
