@@ -1,0 +1,23 @@
+class Solution {
+    public boolean checkStraightLine(int[][] coordinates) {
+        // Get the first two points
+        int x0 = coordinates[0][0], y0 = coordinates[0][1];
+        int x1 = coordinates[1][0], y1 = coordinates[1][1];
+        
+        // Calculate the difference (dy, dx)
+        int dy = y1 - y0;
+        int dx = x1 - x0;
+        
+        // Check all other points against the first two
+        for (int i = 2; i < coordinates.length; i++) {
+            int xi = coordinates[i][0], yi = coordinates[i][1];
+            
+            // Cross product check: (y1 - y0) * (xi - x0) == (yi - y0) * (x1 - x0)
+            if (dy * (xi - x0) != (yi - y0) * dx) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
