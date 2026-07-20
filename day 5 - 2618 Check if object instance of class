@@ -1,0 +1,28 @@
+/**
+ * @param {*} obj
+ * @param {*} classFunction
+ * @return {boolean}
+ */
+var checkIfInstanceOf = function(obj, classFunction) {
+    // Edge case: null, undefined, or invalid classFunction
+    if (obj === null || obj === undefined || typeof classFunction !== 'function') {
+        return false;
+    }
+
+    // Convert primitives (e.g., numbers, strings) to their object wrappers
+    let currentObj = Object(obj);
+
+    // Traverse the prototype chain
+    while (currentObj !== null) {
+        if (Object.getPrototypeOf(currentObj) === classFunction.prototype) {
+            return true;
+        }
+        currentObj = Object.getPrototypeOf(currentObj);
+    }
+
+    return false;
+};
+
+/**
+ * checkIfInstanceOf(new Date(), Date); // true
+ */
