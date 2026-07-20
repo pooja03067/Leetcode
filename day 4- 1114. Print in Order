@@ -1,0 +1,31 @@
+import java.util.concurrent.Semaphore;
+
+class Foo {
+    // Semaphores initialized to 0 permits, effectively blocking any thread 
+    // that tries to acquire a permit until one is released.
+    private Semaphore semSecond = new Semaphore(0);
+    private Semaphore semThird = new Semaphore(0);
+
+    public Foo() {}
+
+    public void first(Runnable printFirst) throws InterruptedException {
+        // printFirst.run() outputs "first". 
+        printFirst.run();
+        // Release a permit for second() to proceed.
+        semSecond.release();
+    }
+
+    public void second(Runnable printSecond) throws InterruptedException {
+        // Acquire permit from first(). Will wait until first() finishes.
+        semSecond.acquire();
+        printSecond.run();
+        // Release a permit for third() to proceed.
+        semThird.release();
+    }
+
+    public void third(Runnable printThird) throws InterruptedException {
+        // Acquire permit from second(). Will wait until second() finishes.
+        semThird.acquire();
+        printThird.run();
+    }
+}
