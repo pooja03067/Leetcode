@@ -1,0 +1,41 @@
+import java.util.concurrent.Semaphore;
+
+class FooBar {
+    private int n;
+    
+    // foo starts with 1 permit so it can run immediately
+    private Semaphore fooSemaphore = new Semaphore(1);
+    
+    // bar starts with 0 permits so it has to wait for foo
+    private Semaphore barSemaphore = new Semaphore(0);
+
+    public FooBar(int n) {
+        this.n = n;
+    }
+
+    public void foo(Runnable printFoo) throws InterruptedException {
+        for (int i = 0; i < n; i++) {
+            // Wait for permission to print "foo"
+            fooSemaphore.acquire();
+            
+            // printFoo.run() outputs "foo". Do not change or remove this line.
+            printFoo.run();
+            
+            // Give permission to bar to run
+            barSemaphore.release();
+        }
+    }
+
+    public void bar(Runnable printBar) throws InterruptedException {
+        for (int i = 0; i < n; i++) {
+            // Wait for permission to print "bar"
+            barSemaphore.acquire();
+            
+            // printBar.run() outputs "bar". Do not change or remove this line.
+            printBar.run();
+            
+            // Give permission back to foo
+            fooSemaphore.release();
+        }
+    }
+}
