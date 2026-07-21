@@ -1,0 +1,22 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public boolean checkIfPangram(String sentence) {
+        // Quick check: a pangram must have at least 26 characters
+        if (sentence.length() < 26) {
+            return false;
+        }
+
+        Set<Character> seen = new HashSet<>();
+        for (char c : sentence.toCharArray()) {
+            seen.add(c);
+            // Early return if all 26 letters of the English alphabet are found
+            if (seen.size() == 26) {
+                return true;
+            }
+        }
+
+        return seen.size() == 26;
+    }
+}
