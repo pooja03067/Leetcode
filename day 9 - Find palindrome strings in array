@@ -1,0 +1,26 @@
+class Solution {
+    public String firstPalindrome(String[] words) {
+        // Iterate through each word in the array
+        for (String word : words) {
+            if (isPalindrome(word)) {
+                return word; // Return the first palindromic string found
+            }
+        }
+        return ""; // Return empty string if no palindrome exists
+    }
+
+    // Helper method to check if a string is a palindrome using two pointers
+    private boolean isPalindrome(String s) {
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
