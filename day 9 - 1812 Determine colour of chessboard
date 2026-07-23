@@ -1,0 +1,11 @@
+class Solution {
+    public boolean squareIsWhite(String coordinates) {
+        // Extract the column character and row character
+        char col = coordinates.charAt(0);
+        char row = coordinates.charAt(1);
+
+        // Sum the numerical values of column and row
+        // If the sum is odd, the square is white (true)
+        // If the sum is even, the square is black (false)
+        return (col + row) % 2 != 0;
+    }
