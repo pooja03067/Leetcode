@@ -1,0 +1,59 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class UndergroundSystem {
+
+    // Custom class to hold check-in information
+    private static class CheckInInfo {
+        String stationName;
+        int time;
+
+        CheckInInfo(String stationName, int time) {
+            this.stationName = stationName;
+            this.time = time;
+        }
+    }
+
+    // Custom class to aggregate route timing stats
+    private static class RouteData {
+        double totalTime;
+        int count;
+
+        RouteData(double totalTime, int count) {
+            this.totalTime = totalTime;
+            this.count = count;
+        }
+    }
+
+    // Maps card ID -> CheckInInfo
+    private Map<Integer, CheckInInfo> checkInMap;
+    // Maps "startStation->endStation" -> RouteData
+    private Map<String, RouteData> routeMap;
+
+    public UndergroundSystem() {
+        checkInMap = new HashMap<>();
+        routeMap = new HashMap<>();
+    }
+    
+    public void checkIn(int id, String stationName, int t) {
+        checkInMap.put(id, new CheckInInfo(stationName, t));
+    }
+    
+    public void checkOut(int id, String stationName, int t) {
+        CheckInInfo info = checkInMap.remove(id);
+        String routeKey = info.stationName + "->" + stationName;
+        int duration = t - info.time;
+
+        RouteData data = routeMap.getOrDefault(routeKey, new RouteData(0, 0));
+        data.totalTime += duration;
+        data.count += 1;
+        
+        routeMap.put(routeKey, data);
+    }
+    
+    public double getAverageTime(String startStation, String endStation) {
+        String routeKey = startStation + "->" + endStation;
+        RouteData data = routeMap.get(routeKey);
+        return data.totalTime / data.count;
+    }
+}
